@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title>testitesti</title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet.wms.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="data/GravelWelhovesi_1.js"></script>
+        <script src="data/MaantieKalannin_lenkki2_2.js"></script>
+        <script src="data/MaantieElkkyinen_lahti_3.js"></script>
+        <script src="data/MaantieLepaisille_4.js"></script>
+        <script src="data/MaantieKalannin_lenkki_5.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:22, minZoom:2
+        }).fitBounds([[60.70309419678586,21.15070553346033],[60.87045932507868,21.765679518730867]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_Opaskartta_0');
+        map.getPane('pane_Opaskartta_0').style.zIndex = 400;
+        var layer_Opaskartta_0 = L.WMS.layer("https://kartta.uki.fi/TeklaOGCWeb/WMS.ashx", "Opaskartta", {
+            pane: 'pane_Opaskartta_0',
+            format: 'image/png',
+            uppercase: true,
+            transparent: true,
+            continuousWorld : true,
+            tiled: true,
+            info_format: 'text/html',
+            opacity: 1,
+            identify: false,
+            attribution: '',
+        });
+        map.addLayer(layer_Opaskartta_0);
+        function pop_GravelWelhovesi_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Nimi</strong><br />' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['symbol'] !== null ? autolinker.link(feature.properties['symbol'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['number'] !== null ? autolinker.link(feature.properties['number'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['comment'] !== null ? autolinker.link(feature.properties['comment'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['description'] !== null ? autolinker.link(feature.properties['description'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['source'] !== null ? autolinker.link(feature.properties['source'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Lataa GPX-tiedosto</strong><br />' + (feature.properties['url'] !== null ? autolinker.link(feature.properties['url'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['url name'] !== null ? autolinker.link(feature.properties['url name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Pituus (km)</strong><br />' + (feature.properties['Pituus (km)'] !== null ? autolinker.link(feature.properties['Pituus (km)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_GravelWelhovesi_1_0() {
+            return {
+                pane: 'pane_GravelWelhovesi_1',
+                opacity: 1,
+                color: 'rgba(246,27,221,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_GravelWelhovesi_1');
+        map.getPane('pane_GravelWelhovesi_1').style.zIndex = 401;
+        map.getPane('pane_GravelWelhovesi_1').style['mix-blend-mode'] = 'normal';
+        var layer_GravelWelhovesi_1 = new L.geoJson(json_GravelWelhovesi_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_GravelWelhovesi_1',
+            layerName: 'layer_GravelWelhovesi_1',
+            pane: 'pane_GravelWelhovesi_1',
+            onEachFeature: pop_GravelWelhovesi_1,
+            style: style_GravelWelhovesi_1_0,
+        });
+        bounds_group.addLayer(layer_GravelWelhovesi_1);
+        map.addLayer(layer_GravelWelhovesi_1);
+        function pop_MaantieKalannin_lenkki2_2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Nimi</strong><br />' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['symbol'] !== null ? autolinker.link(feature.properties['symbol'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['number'] !== null ? autolinker.link(feature.properties['number'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['comment'] !== null ? autolinker.link(feature.properties['comment'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['description'] !== null ? autolinker.link(feature.properties['description'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['source'] !== null ? autolinker.link(feature.properties['source'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Lataa GPX-tiedosto</strong><br />' + (feature.properties['url'] !== null ? autolinker.link(feature.properties['url'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['url name'] !== null ? autolinker.link(feature.properties['url name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Pituus (km)</strong><br />' + (feature.properties['Pituus (km)'] !== null ? autolinker.link(feature.properties['Pituus (km)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_MaantieKalannin_lenkki2_2_0() {
+            return {
+                pane: 'pane_MaantieKalannin_lenkki2_2',
+                opacity: 1,
+                color: 'rgba(4,0,243,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_MaantieKalannin_lenkki2_2');
+        map.getPane('pane_MaantieKalannin_lenkki2_2').style.zIndex = 402;
+        map.getPane('pane_MaantieKalannin_lenkki2_2').style['mix-blend-mode'] = 'normal';
+        var layer_MaantieKalannin_lenkki2_2 = new L.geoJson(json_MaantieKalannin_lenkki2_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_MaantieKalannin_lenkki2_2',
+            layerName: 'layer_MaantieKalannin_lenkki2_2',
+            pane: 'pane_MaantieKalannin_lenkki2_2',
+            onEachFeature: pop_MaantieKalannin_lenkki2_2,
+            style: style_MaantieKalannin_lenkki2_2_0,
+        });
+        bounds_group.addLayer(layer_MaantieKalannin_lenkki2_2);
+        map.addLayer(layer_MaantieKalannin_lenkki2_2);
+        function pop_MaantieElkkyinen_lahti_3(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Nimi</strong><br />' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['symbol'] !== null ? autolinker.link(feature.properties['symbol'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['number'] !== null ? autolinker.link(feature.properties['number'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['comment'] !== null ? autolinker.link(feature.properties['comment'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['description'] !== null ? autolinker.link(feature.properties['description'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['source'] !== null ? autolinker.link(feature.properties['source'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Lataa GPX-tiedosto</strong><br />' + (feature.properties['url'] !== null ? autolinker.link(feature.properties['url'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['url name'] !== null ? autolinker.link(feature.properties['url name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Pituus (km)</strong><br />' + (feature.properties['Pituus (km)'] !== null ? autolinker.link(feature.properties['Pituus (km)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_MaantieElkkyinen_lahti_3_0() {
+            return {
+                pane: 'pane_MaantieElkkyinen_lahti_3',
+                opacity: 1,
+                color: 'rgba(0,232,38,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_MaantieElkkyinen_lahti_3');
+        map.getPane('pane_MaantieElkkyinen_lahti_3').style.zIndex = 403;
+        map.getPane('pane_MaantieElkkyinen_lahti_3').style['mix-blend-mode'] = 'normal';
+        var layer_MaantieElkkyinen_lahti_3 = new L.geoJson(json_MaantieElkkyinen_lahti_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_MaantieElkkyinen_lahti_3',
+            layerName: 'layer_MaantieElkkyinen_lahti_3',
+            pane: 'pane_MaantieElkkyinen_lahti_3',
+            onEachFeature: pop_MaantieElkkyinen_lahti_3,
+            style: style_MaantieElkkyinen_lahti_3_0,
+        });
+        bounds_group.addLayer(layer_MaantieElkkyinen_lahti_3);
+        map.addLayer(layer_MaantieElkkyinen_lahti_3);
+        function pop_MaantieLepaisille_4(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Nimi</strong><br />' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['symbol'] !== null ? autolinker.link(feature.properties['symbol'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['number'] !== null ? autolinker.link(feature.properties['number'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['comment'] !== null ? autolinker.link(feature.properties['comment'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['description'] !== null ? autolinker.link(feature.properties['description'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['source'] !== null ? autolinker.link(feature.properties['source'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Lataa GPX-tiedosto</strong><br />' + (feature.properties['url'] !== null ? autolinker.link(feature.properties['url'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['url name'] !== null ? autolinker.link(feature.properties['url name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Pituus (km)</strong><br />' + (feature.properties['Pituus (km)'] !== null ? autolinker.link(feature.properties['Pituus (km)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_MaantieLepaisille_4_0() {
+            return {
+                pane: 'pane_MaantieLepaisille_4',
+                opacity: 1,
+                color: 'rgba(207,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_MaantieLepaisille_4');
+        map.getPane('pane_MaantieLepaisille_4').style.zIndex = 404;
+        map.getPane('pane_MaantieLepaisille_4').style['mix-blend-mode'] = 'normal';
+        var layer_MaantieLepaisille_4 = new L.geoJson(json_MaantieLepaisille_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_MaantieLepaisille_4',
+            layerName: 'layer_MaantieLepaisille_4',
+            pane: 'pane_MaantieLepaisille_4',
+            onEachFeature: pop_MaantieLepaisille_4,
+            style: style_MaantieLepaisille_4_0,
+        });
+        bounds_group.addLayer(layer_MaantieLepaisille_4);
+        map.addLayer(layer_MaantieLepaisille_4);
+        function pop_MaantieKalannin_lenkki_5(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Nimi</strong><br />' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['symbol'] !== null ? autolinker.link(feature.properties['symbol'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['number'] !== null ? autolinker.link(feature.properties['number'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['comment'] !== null ? autolinker.link(feature.properties['comment'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['description'] !== null ? autolinker.link(feature.properties['description'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['source'] !== null ? autolinker.link(feature.properties['source'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Lataa GPX-tiedosto</strong><br />' + (feature.properties['url'] !== null ? autolinker.link(feature.properties['url'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['url name'] !== null ? autolinker.link(feature.properties['url name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Pituus (km)</strong><br />' + (feature.properties['Pituus (km)'] !== null ? autolinker.link(feature.properties['Pituus (km)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_MaantieKalannin_lenkki_5_0() {
+            return {
+                pane: 'pane_MaantieKalannin_lenkki_5',
+                opacity: 1,
+                color: 'rgba(255,158,23,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_MaantieKalannin_lenkki_5');
+        map.getPane('pane_MaantieKalannin_lenkki_5').style.zIndex = 405;
+        map.getPane('pane_MaantieKalannin_lenkki_5').style['mix-blend-mode'] = 'normal';
+        var layer_MaantieKalannin_lenkki_5 = new L.geoJson(json_MaantieKalannin_lenkki_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_MaantieKalannin_lenkki_5',
+            layerName: 'layer_MaantieKalannin_lenkki_5',
+            pane: 'pane_MaantieKalannin_lenkki_5',
+            onEachFeature: pop_MaantieKalannin_lenkki_5,
+            style: style_MaantieKalannin_lenkki_5_0,
+        });
+        bounds_group.addLayer(layer_MaantieKalannin_lenkki_5);
+        map.addLayer(layer_MaantieKalannin_lenkki_5);
+            var title = new L.Control();
+            title.onAdd = function (map) {
+                this._div = L.DomUtil.create('div', 'info');
+                this.update();
+                return this._div;
+            };
+            title.update = function () {
+                this._div.innerHTML = '<h2>testitesti</h2>';
+            };
+            title.addTo(map);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/MaantieKalannin_lenkki_5.png" /> Maantie:Kalannin_lenkki': layer_MaantieKalannin_lenkki_5,'<img src="legend/MaantieLepaisille_4.png" /> Maantie:Lepaisille': layer_MaantieLepaisille_4,'<img src="legend/MaantieElkkyinen_lahti_3.png" /> Maantie:Elkkyinen_lahti': layer_MaantieElkkyinen_lahti_3,'<img src="legend/MaantieKalannin_lenkki2_2.png" /> Maantie:Kalannin_lenkki2': layer_MaantieKalannin_lenkki2_2,'<img src="legend/GravelWelhovesi_1.png" /> Gravel:Welhovesi': layer_GravelWelhovesi_1,"Opaskartta": layer_Opaskartta_0,}).addTo(map);
+        setBounds();
+        </script>
+    </body>
+</html>
